@@ -10,7 +10,7 @@ const Footer = () => {
     return (
         <footer className={styles.footer}>
             <Link
-                onClick={(e) => e.preventDefault()}
+                // onClick={(e) => e.preventDefault()}
                 to="/pokemons" 
                 className={styles.footerLink}
             >
