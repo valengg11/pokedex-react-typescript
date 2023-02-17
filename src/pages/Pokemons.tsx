@@ -7,6 +7,7 @@ import LoadingScreen from "../components/LoadingScreen"
 
 import { fetchPokemons } from '../api/fetchPokemons';
 import { Pokemon } from "../types/types"
+import { waitFor } from "../utils/utils";
 
 const Pokemons = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,7 @@ const Pokemons = () => {
     useEffect(() => {
         const fetchAllPokemons = async () => {
             setIsLoading(true);
+            await waitFor(1000);
             const allPokemons = await fetchPokemons();
             setPokemons(allPokemons);
             setIsLoading(false);
@@ -23,16 +25,20 @@ const Pokemons = () => {
         fetchAllPokemons();
     }, []);
 
+    const filteredPokemons = pokemons?.slice(0, 151). filter((pokemon) => {
+        return pokemon.name.toLowerCase().match(query.toLowerCase())
+    })
+
     if (isLoading || !pokemons){
         return <LoadingScreen />
-    }
+    };
 
     return (
         <>
           <Header query={query} setQuery={setQuery} />
           <main>
             <nav className={styles.nav}>
-                {pokemons?.slice(0, 151).map((pokemon) => (
+                {filteredPokemons?.slice(0, 151).map((pokemon) => (
                     <Link to={`/pokemons/${pokemon.name.toLowerCase()}`} className={styles.listItem} key={pokemon.id}>
                         <img className={styles.listItemIcon} src={pokemon.imgSrc} alt={pokemon.name}/>
                         <div className={styles.listItemText}>
